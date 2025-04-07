@@ -14,6 +14,9 @@ data/
 cde_embeddings.pkl
 cde_index.faiss
 
+# Allow specific data file
+!cleaned_cde_all.json
+
 # Python basics
 __pycache__/
 *.py[cod]
