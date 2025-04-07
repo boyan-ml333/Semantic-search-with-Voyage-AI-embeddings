@@ -1,0 +1,57 @@
+# This project
+helper_functions/
+instructions/
+data/
+
+# Environment variables and API keys
+.env
+
+# Large data files
+*.csv
+*.pkl
+*.faiss
+cde_embeddings.pkl
+cde_index.faiss
+
+# Python basics
+# __pycache__/
+# *.py[cod]
+# *$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Virtual environments
+venv/
+ENV/
+env/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Test results
+test_results.txt

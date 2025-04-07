@@ -1,0 +1,7 @@
+voyageai==0.1.0
+faiss-cpu==1.7.4
+streamlit==1.31.0
+python-dotenv==1.0.0
+numpy==1.26.0
+pandas==2.1.1
+pickle5==0.0.12 
