@@ -25,7 +25,7 @@ This MVP enables searching the NIH CDE repository (24,000+ elements) using natur
 
 ## Rate Limiting
 
-- Voyage AI API: 3 requests per minute (RPM) limit
+- Voyage AI API free plan has a 3 requests per minute (RPM) limit
 - Implementation: 20-second delays between batch API calls
 - Batch Size: Configurable, default 128 texts per batch
 
