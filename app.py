@@ -2,6 +2,7 @@ import streamlit as st
 import json
 import os
 import numpy as np
+import streamlit_authenticator as authenticator
 
 # Import functions from our previous steps
 from query_processing import get_query_embedding
@@ -14,6 +15,35 @@ from search import search_similar_cdes
 # Assumes this script (app.py) is located in the semantic_clustering_NIH_CDE directory
 CLEANED_DATA_PATH = "cleaned_cde_all.json"
 DEFAULT_K = 10 # Default number of results to show
+
+# --- Authentication ---
+# Get credentials from secrets
+credentials = {
+    "usernames": st.secrets["authentication"]["usernames"]
+} if "authentication" in st.secrets else None
+
+# Create the authenticator
+if credentials:
+    authenticator = authenticator.Authenticate(
+        credentials,
+        "nih_cde_search",
+        "auth_key",
+        cookie_expiry_days=30
+    )
+    
+    # Generate login UI
+    name, authentication_status, username = authenticator.login("Login", "main")
+    
+    # Redirect users based on authentication status
+    if authentication_status == False:
+        st.error("Username/password is incorrect")
+        st.stop()
+    elif authentication_status == None:
+        st.warning("Please enter your username and password")
+        st.stop()
+else:
+    # No authentication configured - proceed with app
+    authentication_status = True
 
 # --- Helper Function with Caching ---
 # Cache the loading of the cleaned data to avoid reloading on every interaction.
@@ -44,6 +74,11 @@ def load_cleaned_data(path):
 st.set_page_config(page_title="CDE Semantic Search", layout="wide") # Configure page settings
 st.title("NIH CDE Semantic Search MVP")
 st.write("Enter a query to find semantically similar Common Data Elements using Voyage AI embeddings and FAISS.")
+
+# User logout if authenticated
+if credentials and authentication_status:
+    authenticator.logout("Logout", "sidebar")
+    st.sidebar.write(f"Welcome, {name}")
 
 # Load the CDE text data once
 # This should trigger only on the first run or if the file changes due to caching

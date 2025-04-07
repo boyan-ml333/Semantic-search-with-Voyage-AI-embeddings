@@ -5,6 +5,7 @@ data/
 
 # Environment variables and API keys
 .env
+.streamlit/secrets.toml
 
 # Large data files
 *.csv
@@ -14,9 +15,9 @@ cde_embeddings.pkl
 cde_index.faiss
 
 # Python basics
-# __pycache__/
-# *.py[cod]
-# *$py.class
+__pycache__/
+*.py[cod]
+*$py.class
 *.so
 .Python
 build/

@@ -22,6 +22,7 @@ This MVP enables searching the NIH CDE repository (24,000+ elements) using natur
 - **Embedding Model**: voyage-large-2 (Voyage AI)
 - **Search Index**: FAISS with cosine similarity (IndexFlatIP)
 - **UI**: Streamlit table display with Rank, CDE Text, Similarity Score, CDE ID
+- **Security**: Optional user authentication via streamlit-authenticator
 
 ## Rate Limiting
 
@@ -37,6 +38,7 @@ This MVP enables searching the NIH CDE repository (24,000+ elements) using natur
 - python-dotenv
 - numpy
 - pandas
+- streamlit-authenticator
 
 ## Setup and Usage
 
@@ -46,7 +48,32 @@ This MVP enables searching the NIH CDE repository (24,000+ elements) using natur
    ```
    VOYAGE_API_KEY=your_api_key_here
    ```
-4. Run the Streamlit app: `streamlit run app.py`
+4. (Optional) Configure authentication:
+   - Create `.streamlit/secrets.toml` following the template
+   - Update usernames and passwords
+
+5. Run the Streamlit app: `streamlit run app.py`
+
+## Deploying with Streamlit
+
+### Local Sharing (Development)
+```
+streamlit run app.py --server.address=0.0.0.0 --server.port=8501
+```
+
+### Streamlit Community Cloud (Recommended)
+1. Push your code to GitHub (excluding secrets and large data files)
+2. Visit [share.streamlit.io](https://share.streamlit.io/)
+3. Connect your GitHub repository
+4. Add your secrets via the Streamlit Cloud dashboard
+5. Deploy the app
+
+### Docker Deployment
+For more controlled environments, use the provided Dockerfile:
+```
+docker build -t nih-cde-search .
+docker run -p 8501:8501 nih-cde-search
+```
 
 ## Data Processing Workflow
 
