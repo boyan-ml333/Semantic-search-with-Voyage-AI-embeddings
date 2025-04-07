@@ -1,8 +1,8 @@
-voyageai==0.1.0
-faiss-cpu==1.7.4
-streamlit==1.31.0
-python-dotenv==1.0.0
-numpy==1.26.0
-pandas==2.1.1
-pickle5==0.0.12
+voyageai==0.3.2
+faiss-cpu==1.10.0
+streamlit==1.25.0
+python-dotenv
+numpy==1.25.2
+pandas==2.0.3
+pickle5
 streamlit-authenticator==0.2.3 

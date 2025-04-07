@@ -2,7 +2,14 @@ import streamlit as st
 import json
 import os
 import numpy as np
-import streamlit_authenticator as authenticator
+
+# Try to import authenticator, but don't fail if it's not available
+try:
+    import streamlit_authenticator as authenticator
+    AUTHENTICATOR_AVAILABLE = True
+except ImportError:
+    AUTHENTICATOR_AVAILABLE = False
+    st.warning("streamlit-authenticator package not installed. Authentication is disabled. Run 'pip install streamlit-authenticator==0.2.3' to enable.")
 
 # Import functions from our previous steps
 from query_processing import get_query_embedding
@@ -17,33 +24,37 @@ CLEANED_DATA_PATH = "cleaned_cde_all.json"
 DEFAULT_K = 10 # Default number of results to show
 
 # --- Authentication ---
-# Get credentials from secrets
-credentials = {
-    "usernames": st.secrets["authentication"]["usernames"]
-} if "authentication" in st.secrets else None
+authentication_status = True  # Default if no authentication
 
-# Create the authenticator
-if credentials:
-    authenticator = authenticator.Authenticate(
-        credentials,
-        "nih_cde_search",
-        "auth_key",
-        cookie_expiry_days=30
-    )
-    
-    # Generate login UI
-    name, authentication_status, username = authenticator.login("Login", "main")
-    
-    # Redirect users based on authentication status
-    if authentication_status == False:
-        st.error("Username/password is incorrect")
-        st.stop()
-    elif authentication_status == None:
-        st.warning("Please enter your username and password")
-        st.stop()
-else:
-    # No authentication configured - proceed with app
-    authentication_status = True
+if AUTHENTICATOR_AVAILABLE:
+    # Get credentials from secrets
+    try:
+        credentials = {
+            "usernames": st.secrets["authentication"]["usernames"]
+        } if "authentication" in st.secrets else None
+
+        # Create the authenticator
+        if credentials:
+            authenticator = authenticator.Authenticate(
+                credentials,
+                "nih_cde_search",
+                "auth_key",
+                cookie_expiry_days=30
+            )
+            
+            # Generate login UI
+            name, authentication_status, username = authenticator.login("Login", "main")
+            
+            # Redirect users based on authentication status
+            if authentication_status == False:
+                st.error("Username/password is incorrect")
+                st.stop()
+            elif authentication_status == None:
+                st.warning("Please enter your username and password")
+                st.stop()
+    except Exception as e:
+        st.warning(f"Authentication error: {e}. Proceeding without authentication.")
+        authentication_status = True
 
 # --- Helper Function with Caching ---
 # Cache the loading of the cleaned data to avoid reloading on every interaction.
@@ -76,9 +87,12 @@ st.title("NIH CDE Semantic Search MVP")
 st.write("Enter a query to find semantically similar Common Data Elements using Voyage AI embeddings and FAISS.")
 
 # User logout if authenticated
-if credentials and authentication_status:
-    authenticator.logout("Logout", "sidebar")
-    st.sidebar.write(f"Welcome, {name}")
+if AUTHENTICATOR_AVAILABLE and 'credentials' in locals() and credentials and authentication_status:
+    try:
+        authenticator.logout("Logout", "sidebar")
+        st.sidebar.write(f"Welcome, {name}")
+    except:
+        pass
 
 # Load the CDE text data once
 # This should trigger only on the first run or if the file changes due to caching
