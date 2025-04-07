@@ -10,12 +10,15 @@ data/
 # Large data files
 *.csv
 *.pkl
-*.faiss
-cde_embeddings.pkl
-cde_index.faiss
+# These are now tracked with Git LFS
+# *.faiss 
+# cde_index.faiss
+# cde_ids_ordered.json
 
-# Allow specific data file
+# Allow specific data files
 !cleaned_cde_all.json
+!cde_index.faiss
+!cde_ids_ordered.json
 
 # Python basics
 __pycache__/
